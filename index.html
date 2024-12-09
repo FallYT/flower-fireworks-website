@@ -31,11 +31,11 @@
         constructor(x, y, color, size) {
             this.x = x;
             this.y = y;
-            this.vx = random(-5, 5);
-            this.vy = random(-5, 5);
+            this.vx = random(-2, 2);
+            this.vy = random(-2, 2);
             this.color = color;
             this.size = size;
-            this.life = random(30, 100);
+            this.life = random(100, 300);  // Longer lifespan
         }
 
         draw() {
@@ -90,31 +90,14 @@
     function createRandomHeart() {
         const x = random(0, canvas.width);
         const y = random(0, canvas.height);
-        const size = random(20, 50);
+        const size = random(30, 60);
         drawHeart(x, y, size);
-    }
-
-    function createStar(x, y, points, outerRadius, innerRadius) {
-        let rot = Math.PI / 2;
-        const step = Math.PI / points;
-
-        ctx.beginPath();
-        for (let i = 0; i < 2 * points; i++) {
-            const radius = i % 2 === 0 ? outerRadius : innerRadius;
-            const xPos = x + Math.cos(rot) * radius;
-            const yPos = y + Math.sin(rot) * radius;
-            ctx.lineTo(xPos, yPos);
-            rot += step;
-        }
-        ctx.closePath();
-
-        ctx.fillStyle = `hsl(${Math.random() * 360}, 100%, 70%)`;
-        ctx.fill();
     }
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // Draw and update particles
         particles.forEach((particle, index) => {
             particle.update();
             particle.draw();
@@ -124,9 +107,9 @@
             }
         });
 
+        // Randomly create particles at a low probability
         if (Math.random() > 0.97) createRandomParticle();
         if (Math.random() > 0.98) createRandomHeart();
-        if (Math.random() > 0.95) createStar(random(0, canvas.width), random(0, canvas.height), 5, 20, 10);
 
         requestAnimationFrame(animate);
     }
