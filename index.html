@@ -31,15 +31,24 @@
         constructor(x, y) {
             this.x = x;
             this.y = y;
-            this.radius = random(5, 15);
-            this.color = `hsl(${random(0, 360)}, 100%, 50%)`;
+            this.radius = random(20, 40);
+            this.color = `hsl(${random(0, 360)}, 100%, 60%)`;
+            this.petals = [];
+            for (let i = 0; i < 8; i++) {
+                const angle = (i * Math.PI * 2) / 8;
+                const petalX = x + Math.cos(angle) * this.radius;
+                const petalY = y + Math.sin(angle) * this.radius;
+                this.petals.push({ x: petalX, y: petalY });
+            }
         }
 
         draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fillStyle = this.color;
-            ctx.fill();
+            this.petals.forEach(petal => {
+                ctx.beginPath();
+                ctx.arc(petal.x, petal.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+            });
         }
     }
 
@@ -72,15 +81,15 @@
     const fireworks = [];
 
     function createFlower() {
-        const x = random(0, canvas.width);
-        const y = random(0, canvas.height);
+        const x = random(100, canvas.width - 100);
+        const y = random(100, canvas.height - 100);
         flowers.push(new Flower(x, y));
     }
 
     function createFirework() {
         const x = random(0, canvas.width);
         const y = random(0, canvas.height / 2);
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 50; i++) {
             fireworks.push(new Firework(x, y));
         }
     }
@@ -104,8 +113,8 @@
         requestAnimationFrame(animate);
     }
 
-    setInterval(createFlower, 100);
-    setInterval(createFirework, 300);
+    setInterval(createFlower, 500);
+    setInterval(createFirework, 500);
 
     animate();
 </script>
